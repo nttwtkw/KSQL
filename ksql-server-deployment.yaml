@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: ksql-server
+  name: ksql-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ksql-server
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ksql-server
+    spec:
+      nodeName: k8s-worker2.ikp.com
+      containers:
+        - env:
+            - name: KAFKA_CONFLUENT_SUPPORT_METRICS_ENABLE
+              value: "fasle"
+            - name: KSQL_BOOTSTRAP_SERVERS
+              value: broker:9092
+            - name: KSQL_CACHE_MAX_BYTES_BUFFERING
+              value: "0"
+            - name: KSQL_CONFIG_DIR
+              value: /etc/ksql
+            - name: KSQL_CONSUMER_INTERCEPTOR_CLASSES
+              value: io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor
+            - name: KSQL_HOST_NAME
+              value: ksql-server
+            - name: KSQL_KSQL_CONNECT_URL
+              value: http://connect:8083
+            - name: KSQL_LISTENERS
+              value: http://0.0.0.0:8088
+            - name: KSQL_LOG4J_OPTS
+              value: -Dlog4j.configuration=file:/etc/ksql/log4j-rolling.properties
+            - name: KSQL_PRODUCER_INTERCEPTOR_CLASSES
+              value: io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor
+          image: confluentinc/cp-ksql-server:5.4.1
+          name: ksql-server
+          ports:
+            - containerPort: 8088
+          resources: {}
+      hostname: ksql-server
+      restartPolicy: Always
+status: {}
