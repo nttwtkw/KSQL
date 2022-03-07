@@ -49,6 +49,8 @@ spec:
               value: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
             - name: CONNECT_OFFSET_FLUSH_INTERVAL_MS
               value: "10000"
+            - name: CONNECT_OFFSET.FLUSH.TIMEOUT.MS
+              value: "1000000"
             - name: CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR
               value: "1"
             - name: CONNECT_OFFSET_STORAGE_TOPIC
